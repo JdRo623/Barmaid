@@ -1,0 +1,165 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Autenticacion
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http 
+  - https 
+# format of bodies a client can send (Content-Type)
+
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+  - application/xml
+paths:
+  /inicioSesion:
+    x-swagger-router-controller: inicioSesionController
+    post:
+      description: Registra el documento de una Observacion
+      # used as the method name of the controller
+      operationId: inicioSesion
+      parameters:
+        - name: ciudadanos 
+          in: body
+          schema:
+           $ref: "#/definitions/InicioSesion"
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/MessageResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /registroUsuario:
+    x-swagger-router-controller: inicioSesionController
+    post:
+      description: Regresa todos las organizaciones disponibles
+      # used as the method name of the controller
+      operationId: registarUsuario
+      parameters:
+        - name: ciudadanos 
+          in: body
+          schema:
+           $ref: "#/definitions/RegistroUsuario"
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/MessageResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  MessageResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ObtenerDetalleOrganizacion:
+    type: object
+    properties:
+      idOrganizacion:
+        type: string
+        description: numero de consecutivo de Organizacion a consultar
+  RegistroUsuario:
+    type: object
+    properties:
+      data:
+        type: string
+        description: numero de pagina de Organizaciones
+
+  InicioSesion:
+    type: object
+    properties:
+      correo:
+         type: string
+      contrasena:
+         type: string
+  SetEstadoOrganizacion:
+    type: object
+    properties:
+      idOrganizacion:
+        type: string
+        description: Consecutivo de la Organizacion a modificar
+      estado_aprobacion:
+        type: string
+        description: Nuevo estado de la Organizacion
+      comentario:
+        type: string
+        description: Comentario sobre la modificacion de la Organizacion a modificar
+      id_agente_vigilancia:
+        type: string
+        description: Id del agente de vigilancia que realiza la aprobación
+      token:
+        type: string
+        description: Token del agente de vigilancia que realiza la aprobación
+
+  GuardadoOrganizacion:
+    type: object
+    properties:
+      nit:
+        type: string
+      razonSocial:
+        type: string
+      direccion:
+        type: string
+      telefono:
+        type: string
+      correoElectronico:
+        type: string
+      paginaWeb:
+        type: string
+      documentoRepresentanteLegal:
+        type: string
+      representanteLegal:
+        type: string
+      ambitoGeografico:
+        type: string
+      etapas:
+        type: array
+        items:
+          type: string
+      tiposArchivo: 
+        type: array
+        items:
+          type: string
+      miembros:
+       $ref: '#/definitions/ListadoDeMiembros'
+  ListadoDeMiembros:
+    type: array
+    items:
+      $ref: '#/definitions/Miembro'
+  Miembro:
+    type: object
+    properties:
+      cedula:
+        type: string
+      nombres:
+        type: string
+      apellidos:
+        type: string
+      cargo:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string

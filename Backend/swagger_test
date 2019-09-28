@@ -1,0 +1,186 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Autenticacion
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http 
+  - https 
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /getAllVeedurias:
+    x-swagger-router-controller: registroController
+    get:
+      description: Regresa todos las veedurias disponibles
+      # used as the method name of the controller
+      operationId: getAllVeedurias
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/MessageResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /guardarVeeduria:
+    x-swagger-router-controller: registroController
+    get:
+      description: get the game list
+      operationId: guardarVeeduria
+      
+      parameters:
+        - name: nivel_territorial
+          in: query
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Guarda la veeduria en la base de datos
+      # used as the method name of the controller
+      operationId: guardarVeeduriaPost
+      consumes:
+        - application/json
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: nivel_territorial
+          in: query
+          type: string
+          required: true
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/MessageResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /guardarCiudadanos:
+    x-swagger-router-controller: registroController
+    post:
+      description: Guarda la veeduria en la base de datos
+      operationId: guardarCiudadanos
+      parameters:
+        - name: ciudadanos 
+          in: body
+          schema:
+           $ref: "#/definitions/ListadoDeCiudadanos"
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/MessageResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse" 
+  /videogames:
+    x-swagger-router-controller: registroController
+    get:
+      description: get the game list
+      operationId: getGames
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Guarda la veeduria en la base de datos
+      # used as the method name of the controller
+      operationId: getGamesa
+      parameters:
+        - name: nivel_territorial
+          in: query
+          type: string
+          required: true
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/MessageResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  MessageResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ListadoDeCiudadanos:
+    type: array
+    items:
+      $ref: '#/definitions/Ciudadano'
+  Ciudadano:
+    type: object
+    properties:
+      nombres:
+        type: string
+        description: Nombres del ciudadano
+      apellidos:
+        type: string
+        description: Apellidos del ciudadano
+      numero_documento:
+        type: string
+        description: Numero de documentod del ciudadano
+      correo_electronico:
+        type: string
+        description: Correo electronico del ciudadano
+      direccion_residencia:
+        type: string
+        description: Direccion del ciudadano
+      consecutivo_veeduria:
+        type: string
+        description: Consecutivo de la veeduria
+    required:
+      - nombres
+      - apellidos
+      - numero_documento      
+      - correo_electronico
+      - direccion_residencia
+      - consecutivo_veeduria
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
