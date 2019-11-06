@@ -13,7 +13,7 @@
     "express-interceptor": "^1.2.0",
     "http-swagger-router": "^2.0.5",
     "keyczarjs": "^0.1.0",
-    "mongoose": "^5.6.2",
+    "mongoose": "^5.7.5",
     "pdfkit": "^0.10.0",
     "qr-image": "^3.2.0",
     "qrcode": "^1.4.0",
